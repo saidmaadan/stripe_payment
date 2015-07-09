@@ -6,19 +6,24 @@
 	</div>
 </div>
 <div class='row'>
-	<div class='col-sm-8'></div>
+	<div class='col-sm-8'>
+		<h1><%= @product.title %></h1>
+		<h3><%= @product.title %></h3>
+		<p><%= raw @product.description %></p>
+		<p><%= number_to_currency(@product.price) %></p>
+	</div>
 	<div class='col-sm-4'>
 		<%= form_tag charges_path, id: 'chargeForm' do %>
 		  <article>
 		    <label class="amount">
-		      <span>Amount: $5.00</span>
+		      <span><%= number_to_currency(@product.price) %></span>
 		    </label>
 		  </article>
 
 		  <script src="https://checkout.stripe.com/checkout.js"></script>
 		  <%= hidden_field_tag 'stripeToken' %>
 		  <%= hidden_field_tag 'stripeEmail' %>
-		  <%= hidden_field_tag 'amount', 25000 %>
+		  <%= hidden_field_tag 'amount', @product.price_in_cents %>
 		  <button id='btn-buy' type='button' class="btn btn-success btn-lg btn-block"><span class="glyphicon glyphicon-ok"></span> I want this!</button>
 		  <script>
 		  	var handler = StripeCheckout.configure({
@@ -33,7 +38,7 @@
 		  	addEventListener('click', function(e){
 		  		handler.open({
 		  			name: "Post Job",
-		  			description: 'Post your Job for 3 months ($250.00)',
+		  			description: 'Post your Job for 3 months (<%= number_to_currency(@product.price) %>)',
 		  			amount: document.getElementById("amount").value
 		  		});
 		  		e.preventDefault();
